@@ -1,9 +1,9 @@
 /**
-* \file DiodeClipperFilter.h
+* \file DiodeClipperFilter_v6.h
 */
 
-#ifndef ATKADC_DIODECLIPPERFILTER_H
-#define ATKADC_DIODECLIPPERFILTER_H
+#ifndef ATKADC_DIODECLIPPERFILTERV6_H
+#define ATKADC_DIODECLIPPERFILTERV6_H
 
 #include <memory>
 
@@ -19,7 +19,7 @@ namespace ATKADC
 {
 	/// Diode clipper filter, based on a trapezoidal rule
 	template<typename DataType_>
-	class DiodeClipperFilter final : public ATK::TypedBaseFilter<DataType_>
+	class DiodeClipperFilterv6 final : public ATK::TypedBaseFilter<DataType_>
 	{
 		class SimpleOverdriveFunction;
 	public:
@@ -37,9 +37,9 @@ namespace ATKADC
 		/*!
 		* @brief Constructor
 		*/
-		DiodeClipperFilter();
+    DiodeClipperFilterv6();
 		/// Destructor
-		~DiodeClipperFilter();
+		~DiodeClipperFilterv6();
 
 	protected:
 		void setup() final;
