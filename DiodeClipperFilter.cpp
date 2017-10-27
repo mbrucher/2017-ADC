@@ -23,7 +23,7 @@
 #define BOOST_TEST_NO_MAIN
 #include <boost/test/unit_test.hpp>
 
-#define PROCESSSIZE (1024*1024)
+#define PROCESSSIZE (1024)
 
 namespace ATKADC
 {
@@ -160,15 +160,18 @@ BOOST_AUTO_TEST_CASE(DiodeClipperFilter_const_sin1k)
 	ATK::SimpleSinusGeneratorFilter<double> generator;
 	generator.set_frequency(100);
 	generator.set_output_sampling_rate(48000);
+	generator.set_output_delay(6);
 
 	ATK::OversamplingFilter<double, ATK::Oversampling6points5order_4<double> > oversampling_filter;
 	oversampling_filter.set_input_sampling_rate(48000);
 	oversampling_filter.set_output_sampling_rate(48000 * 4);
 	oversampling_filter.set_input_port(0, &generator, 0);
+	oversampling_filter.set_output_delay(1);
 
 	ATKADC::DiodeClipperFilter<double> filter;
 	filter.set_input_sampling_rate(48000 * 4);
 	filter.set_input_port(0, &oversampling_filter, 0);
+	filter.set_output_delay(5);
 
 	ATK::IIRFilter<ATK::ButterworthLowPassCoefficients<double> > lowfilter;
 	lowfilter.set_input_sampling_rate(48000 * 4);
@@ -177,10 +180,11 @@ BOOST_AUTO_TEST_CASE(DiodeClipperFilter_const_sin1k)
 	lowfilter.set_order(5);
 	lowfilter.set_input_port(0, &filter, 0);
 
-	ATK::DecimationFilter<double> decimation_filter(1);
+	ATK::DecimationFilter<double> decimation_filter;
 	decimation_filter.set_input_sampling_rate(48000 * 4);
 	decimation_filter.set_output_sampling_rate(48000);
 	decimation_filter.set_input_port(0, &lowfilter, 0);
 
-	decimation_filter.process(PROCESSSIZE);
+	for(size_t i = 0; i < PROCESSSIZE; ++i)
+		decimation_filter.process(PROCESSSIZE);
 }
