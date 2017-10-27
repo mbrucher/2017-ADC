@@ -5,7 +5,12 @@ project(ADC2017)
 find_package(ATK)
 find_package(Boost REQUIRED unit_test_framework system)
 
+add_definitions("-DBOOST_ALL_NO_LIB")
+
 FILE(GLOB SRC *.cpp *.h)
 
+include_directories(${Boost_INCLUDE_DIR})
+include_directories(${ATK_INCLUDE_DIRS})
+
 add_executable(ATKADC ${SRC})
-link_libraries(ATKADC ATKEQ ATKTools ATKMock ATKCore ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(ATKADC ${ATK_EQ_LIBRARY} ${ATK_MOCK_LIBRARY} ${ATK_TOOLS_LIBRARY} ${ATK_CORE_LIBRARY} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
